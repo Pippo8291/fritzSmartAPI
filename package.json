@@ -1,0 +1,30 @@
+{
+  "name": "fritzsmartapi",
+  "version": "0.0.0",
+  "description": "node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/mocha.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SheepCreativeSoftware/fritzSmartAPI.git"
+  },
+  "keywords": [
+    "api",
+    "fritzbox",
+    "dect",
+    "aha-http",
+    "interface",
+    "smart-home"
+  ],
+  "author": "Marina Egner",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SheepCreativeSoftware/fritzSmartAPI/issues"
+  },
+  "homepage": "https://github.com/SheepCreativeSoftware/fritzSmartAPI#readme",
+  "devDependencies": {
+    "eslint": "^8.32.0"
+  }
+}
