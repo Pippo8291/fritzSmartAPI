@@ -1,10 +1,10 @@
 {
   "name": "fritzsmartapi",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)",
   "main": "index.js",
   "scripts": {
-    "test": "node test/mocha.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,12 @@
   },
   "homepage": "https://github.com/SheepCreativeSoftware/fritzSmartAPI#readme",
   "devDependencies": {
-    "eslint": "^8.32.0"
+    "eslint": "^8.32.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^10.2.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "fast-xml-parser": "^4.0.14"
   }
 }
