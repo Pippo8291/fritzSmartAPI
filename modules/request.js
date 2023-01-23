@@ -11,7 +11,7 @@ const request = {};
  * @param {String} connection.service - the Fritz!OS service you want to call
  * @param {URLSearchParams} connection.parameters - GET Request parameter list
  * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
- * @returns {String} Response XML Data as text
+ * @returns {Promise<String>} Response XML Data as text
  */
 
 request.httpGetRequest = async function({host, service, parameters, useSSL}) {
@@ -22,6 +22,7 @@ request.httpGetRequest = async function({host, service, parameters, useSSL}) {
 		method: 'GET',
 	}).
 		catch((error) => {
+			// Catch if connection failes
 			return Promise.reject(error);
 		});
 	if(response.ok)	return Promise.resolve(response.text());

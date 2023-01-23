@@ -13,27 +13,28 @@ import {XMLParser} from 'fast-xml-parser';
 
 /**
  * Get Challenge Code from login Service of Fritz!OS
+ * @async
  * @function
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {Number} connection.version - version to be used for connection (1 or 2)
  * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
- * @return {String} Challenge code
+ * @return {Promise<String>} Challenge code
  */
 const getChallengeCode = async function({host, version, useSSL}) {
-	try {
-		const response = await request.httpGetRequest({
-			host,
-			parameters: new URLSearchParams({version}),
-			service: 'login_sid.lua',
-			useSSL,
+	const response = await request.httpGetRequest({
+		host,
+		parameters: new URLSearchParams({version}),
+		service: 'login_sid.lua',
+		useSSL,
+	}).
+		catch((error) => {
+			// If request fails, reject with error message
+			return Promise.reject(error);
 		});
-		const parser = new XMLParser({ignoreDeclaration: true});
-		const {SessionInfo} = parser.parse(response);
-		return SessionInfo.Challenge;
-	} catch (error) {
-		throw new Error(error);
-	}
+	const parser = new XMLParser({ignoreDeclaration: true});
+	const {SessionInfo} = parser.parse(response);
+	return Promise.resolve(SessionInfo.Challenge);
 };
 
 
@@ -52,25 +53,25 @@ const getSession = function(version) {
 	 * @param {String} connection.user - the username for the login
 	 * @param {String} connection.challengeResponse - the challengeResponse for the login
 	 * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
-	 * @returns {Object} Response session data as Object
+	 * @returns {Promise<Object>} Response session data as Object
 	 */
 	return async function ({host, user, challengeResponse, useSSL}) {
-		try {
-			const response = await request.httpGetRequest({
-				host,
-				parameters: new URLSearchParams({
-					response: challengeResponse,
-					username: user,
-					version,
-				}),
-				service: 'login_sid.lua',
-				useSSL,
+		const response = await request.httpGetRequest({
+			host,
+			parameters: new URLSearchParams({
+				response: challengeResponse,
+				username: user,
+				version,
+			}),
+			service: 'login_sid.lua',
+			useSSL,
+		}).
+			catch((error) => {
+				// If request fails, reject with error message
+				return Promise.reject(error);
 			});
-			const parser = new XMLParser({ignoreDeclaration: true});
-			return parser.parse(response);
-		} catch (error) {
-			throw new Error(error);
-		}
+		const parser = new XMLParser({ignoreDeclaration: true});
+		return Promise.resolve(parser.parse(response));
 	};
 };
 
@@ -82,23 +83,27 @@ const version = {
 
 /**
  * Login request to Fritz!OS with use of PBKDF2 Challenge-Response Process(Requires Fritz!OS 5.50)
+ * @async
+ * @function
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {String} connection.user - the username for the login
  * @param {String} connection.challengeResponse - the Challenge Response for the login
  * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
- * @returns {Object} Response session data as Object
+ * @returns {Promise<Object>} Response session data as Object
  */
 const getSessionPbkdf2 = getSession(version.PBKDF2);
 
 /**
  * Login request to Fritz!OS with use of MD5 Challenge-Response Process(Requires Fritz!OS 5.50)
+ * @async
+ * @function
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {String} connection.user - the username for the login
  * @param {String} connection.challengeResponse - the Challenge Response for the login
  * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
- * @returns {Object} Response session data as Object
+ * @returns {Promise<Object>} Response session data as Object
  */
 const getSessionMd5 = getSession(version.MD5);
 
@@ -111,51 +116,58 @@ const getSessionMd5 = getSession(version.MD5);
  * @param {String} connection.password - the password for the login
  * @param {String=} [connection.mode=PBKDF2] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @returns {Object} Response session data as Object
+ * @returns {Promise<Object>} Response session data as Object
  */
 createSession.getSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false}) {
-	try {
-		let processVersion = version.MD5;
+	let processVersion = version.MD5;
 
-		// Force mode if selected
-		if(mode === 'PBKDF2') processVersion = version.PBKDF2;
+	// Force mode if selected
+	if(mode === 'PBKDF2') processVersion = version.PBKDF2;
 
-		const challengeCode = await getChallengeCode({
-			host,
-			useSSL,
-			version: processVersion,
+	const challengeCode = await getChallengeCode({
+		host,
+		useSSL,
+		version: processVersion,
+	}).
+		catch((error) => {
+			Promise.reject(error);
 		});
 
-		// PBKDF2 is supported if included
-		const supportsPbkdf2 = challengeCode.startsWith('2$');
+	// PBKDF2 is supported if included
+	const supportsPbkdf2 = challengeCode.startsWith('2$');
 
-		if(supportsPbkdf2) {
-			const challengeResponse = calcHash.calcPbkdf2Response({
-				challengeCode,
-				password,
-			});
-			return getSessionPbkdf2({
-				challengeResponse,
-				host,
-				useSSL,
-				user,
-			});
-		}
-
-		// Otherwise use MD5
-		const challengeResponse = calcHash.calcMd5Response({
+	if(supportsPbkdf2) {
+		const challengeResponse = calcHash.calcPbkdf2Response({
 			challengeCode,
 			password,
 		});
-		return getSessionMd5({
+		const sessionInfo = await getSessionPbkdf2({
 			challengeResponse,
 			host,
 			useSSL,
 			user,
-		});
-	} catch (error) {
-		throw new Error(error);
+		}).
+			catch((error) => {
+				Promise.reject(error);
+			});
+		return Promise.resolve(sessionInfo);
 	}
+
+	// Otherwise use MD5
+	const challengeResponse = calcHash.calcMd5Response({
+		challengeCode,
+		password,
+	});
+	const sessionInfo = getSessionMd5({
+		challengeResponse,
+		host,
+		useSSL,
+		user,
+	}).
+		catch((error) => {
+			Promise.reject(error);
+		});
+	return Promise.resolve(sessionInfo);
 };
 
 export {createSession};

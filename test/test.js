@@ -2,18 +2,19 @@
 /* eslint-disable no-undef */
 'use-strict';
 
+import * as fritzAPI from '../index.js';
+import {config} from './config.js';
 import {equal} from 'assert';
-import {readFileSync} from 'fs';
 
-const rawConfigData = readFileSync('./test/config.json');
-const configData = JSON.parse(rawConfigData);
 
-const {host, user, password} = configData.credentials;
-console.log({
-	host,
-	password,
-	user,
-});
+fritzAPI.doInitSession({
+	host: config.credentials.host,
+	mode: 'MD5',
+	password: config.credentials.password,
+	useSSL: false,
+	user: config.credentials.user,
+}).then((response) => console.log(response)).
+	catch((error) => console.log(error));
 
 describe('Array', function () {
 	describe('#indexOf()', function () {
