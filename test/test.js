@@ -8,13 +8,13 @@ import {equal} from 'assert';
 
 
 fritzAPI.doInitSession({
-	host: config.credentials.host,
+	host: '192.168.10.250',
 	mode: 'MD5',
 	password: config.credentials.password,
 	useSSL: false,
 	user: config.credentials.user,
 }).then((response) => console.log(response)).
-	catch((error) => console.log(error));
+	catch((error) => console.log('Failed fetch: ', error));
 
 describe('Array', function () {
 	describe('#indexOf()', function () {

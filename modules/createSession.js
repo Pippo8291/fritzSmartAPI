@@ -130,7 +130,7 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 		version: processVersion,
 	}).
 		catch((error) => {
-			Promise.reject(error);
+			return Promise.reject(error);
 		});
 
 	// PBKDF2 is supported if included
@@ -148,7 +148,7 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 			user,
 		}).
 			catch((error) => {
-				Promise.reject(error);
+				return Promise.reject(error);
 			});
 		return Promise.resolve(sessionInfo);
 	}
@@ -165,7 +165,7 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 		user,
 	}).
 		catch((error) => {
-			Promise.reject(error);
+			return Promise.reject(error);
 		});
 	return Promise.resolve(sessionInfo);
 };
