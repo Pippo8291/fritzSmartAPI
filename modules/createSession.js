@@ -5,11 +5,11 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-const createSession = {};
-
 import {calcHash} from './calcHash.js';
 import {request} from './request.js';
 import {XMLParser} from 'fast-xml-parser';
+
+const createSession = {};
 
 /**
  * Get Challenge Code from login Service of Fritz!OS

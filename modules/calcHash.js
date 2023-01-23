@@ -9,9 +9,6 @@ const calcHash = {};
 
 import {createHash, pbkdf2Sync} from 'node:crypto';
 
-// Calculate Hash with MD5
-const hash = createHash('md5');
-
 /**
  * Calculates MD5 Challenge Response code
  * @param {Object} credentials - credentials details
@@ -20,6 +17,7 @@ const hash = createHash('md5');
  * @returns {String} MD5 Challenge Response code
  */
 calcHash.calcMd5Response = function({challengeCode, password}) {
+	const hash = createHash('md5');
 	const bufferData = Buffer.from(challengeCode + '-' + password, 'UTF-16LE');
 	const md5Hash = hash.update(bufferData).digest('hex');
 	return challengeCode + '-' + md5Hash;

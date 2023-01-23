@@ -1,5 +1,10 @@
 'use-strict';
 
+/**
+ * @module request
+ * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
+ * @copyright Marina Egner 2023
+ */
 const request = {};
 
 /**
