@@ -48,4 +48,15 @@ describe('#General', function () {
 	describe('#fromSession', function () {
 		it('Get General Information from Fritz!OS');
 	});
+	it('Logout - It should return a object with a invalid Session ID', async function () {
+		const response = await fritzAPI.doEndSession({
+			host: config.credentials.host,
+			mode: 'PBKDF2',
+			sessionId: config.sessionId,
+			useSSL: false,
+		});
+		assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
+		assert.strictEqual(typeof response.SessionInfo.SID, 'number', `The SID should be type number but is ${typeof response.SessionInfo.SID}`);
+		assert.strictEqual(response.SessionInfo.SID, zero);
+	});
 });

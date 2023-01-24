@@ -6,8 +6,8 @@
  * @copyright Marina Egner 2023
  */
 import {calcHash} from './calcHash.js';
+import {parseData} from './parseData.js';
 import {request} from './request.js';
-import {XMLParser} from 'fast-xml-parser';
 
 const createSession = {};
 
@@ -32,8 +32,7 @@ const getChallengeCode = async function({host, version, useSSL}) {
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	const parser = new XMLParser({ignoreDeclaration: true});
-	const {SessionInfo} = parser.parse(response);
+	const {SessionInfo} = parseData.xmlToJson({xmlData: response});
 	return Promise.resolve(SessionInfo.Challenge);
 };
 
@@ -70,8 +69,7 @@ const getSession = function(version) {
 				// If request fails, reject with error message
 				return Promise.reject(error);
 			});
-		const parser = new XMLParser({ignoreDeclaration: true});
-		return Promise.resolve(parser.parse(response));
+		return Promise.resolve(parseData.xmlToJson({xmlData: response}));
 	};
 };
 

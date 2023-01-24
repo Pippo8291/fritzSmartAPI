@@ -5,8 +5,8 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
+import {parseData} from './parseData.js';
 import {request} from './request.js';
-import {XMLParser} from 'fast-xml-parser';
 
 // Define some Magic numbers for the version which is provided to the login service
 const version = {
@@ -44,8 +44,7 @@ const destroySession = async function({host, sessionId, mode='PBKDF2', useSSL=fa
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	const parser = new XMLParser({ignoreDeclaration: true});
-	return Promise.resolve(parser.parse(response));
+	return Promise.resolve(parseData.xmlToJson({xmlData: response}));
 };
 
 export {destroySession};
