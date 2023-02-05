@@ -5,7 +5,6 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-const request = {};
 
 /**
  * Performs a GET Request to a Fritz!OS Service
@@ -19,7 +18,7 @@ const request = {};
  * @returns {Promise<String>} Response XML Data as text
  */
 
-request.httpGetRequest = async function({host, service, parameters, useSSL}) {
+const httpGetRequest = async function({host, service, parameters, useSSL}) {
 	let urlStart = 'http';
 	if(useSSL) urlStart = 'https';
 	const url = `${urlStart}://${host}/${service}?${parameters}`;
@@ -47,12 +46,12 @@ request.httpGetRequest = async function({host, service, parameters, useSSL}) {
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @returns {Promise<String>} Response XML or text data (Depending on the command)
  */
-request.httpGetCommand = async function({host, actorId, command, parameter, sessionId, useSSL=false}) {
+const httpGetCommand = async function({host, actorId, command, parameter, sessionId, useSSL=false}) {
 	const parameters = new URLSearchParams({sid: sessionId});
 	if(typeof actorId !== 'undefined') parameters.append('ain', actorId);
 	if(typeof command !== 'undefined') parameters.append('switchcmd', command);
 	if(typeof parameter !== 'undefined') parameters.append('param', parameter);
-	const response = await request.httpGetRequest({
+	const response = await httpGetRequest({
 		host,
 		parameters,
 		service: 'webservices/homeautoswitch.lua',
@@ -65,4 +64,4 @@ request.httpGetCommand = async function({host, actorId, command, parameter, sess
 	return Promise.resolve(response);
 };
 
-export {request};
+export {httpGetRequest, httpGetCommand};

@@ -5,7 +5,6 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-const calcHash = {};
 
 import {createHash, pbkdf2Sync} from 'node:crypto';
 
@@ -16,7 +15,7 @@ import {createHash, pbkdf2Sync} from 'node:crypto';
  * @param {String} credentials.password - the password for the login
  * @returns {String} MD5 Challenge Response code
  */
-calcHash.calcMd5Response = function({challengeCode, password}) {
+const calcMd5Response = function({challengeCode, password}) {
 	const hash = createHash('md5');
 	const bufferData = Buffer.from(challengeCode + '-' + password, 'UTF-16LE');
 	const md5Hash = hash.update(bufferData).digest('hex');
@@ -33,7 +32,7 @@ const pbkdf2KeyLen = 32;
  * @param {String} credentials.password - the password for the login
  * @returns {String} PBKDF2 Challenge Response code
  */
-calcHash.calcPbkdf2Response = function({challengeCode, password}) {
+const calcPbkdf2Response = function({challengeCode, password}) {
 	const challengeSplitted = challengeCode.split('$');
 	const challenge = {
 		iter1: Number(challengeSplitted[1]),
@@ -49,4 +48,4 @@ calcHash.calcPbkdf2Response = function({challengeCode, password}) {
 	return challenge.salt2Norm + '$' + hash2;
 };
 
-export {calcHash};
+export {calcMd5Response, calcPbkdf2Response};

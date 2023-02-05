@@ -1,9 +1,9 @@
 'use-strict';
 
-import {checkSession} from './modules/checkSession.js';
-import {createSession} from './modules/createSession.js';
+import * as checkSession from './modules/checkSession.js';
+import * as createSession from './modules/createSession.js';
+import * as deviceInfo from './modules/deviceInfo.js';
 import {destroySession} from './modules/destroySession.js';
-import {deviceInfo} from './modules/deviceInfo.js';
 
 /**
  * Login request to Fritz!OS with use of PBKDF2 (Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process.
@@ -17,7 +17,7 @@ import {deviceInfo} from './modules/deviceInfo.js';
  * @returns {Promise<Object>} Response session data as Object
  */
 export const doInitSession = function({host, user, password, mode, useSSL}) {
-	return createSession.getSession({host,
+	return createSession.doInitSession({host,
 		mode,
 		password,
 		useSSL,

@@ -5,10 +5,8 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-import {parseData} from './parseData.js';
-import {request} from './request.js';
-
-const checkSession = {};
+import * as request from './request.js';
+import {xmlToJson} from './parseData.js';
 
 // Define some Magic numbers for the version which is provided to the login service
 const version = {
@@ -45,7 +43,7 @@ const checkSessionId = async function({host, sessionId, mode, useSSL}) {
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	return Promise.resolve(parseData.xmlToJson({xmlData: response}));
+	return Promise.resolve(xmlToJson({xmlData: response}));
 };
 
 const zero = 0;
@@ -61,7 +59,7 @@ const zero = 0;
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Boolean>} Response if Session is valid
  */
-checkSession.isValidSession = async function({host, sessionId, mode='PBKDF2', useSSL=false}) {
+const isValidSession = async function({host, sessionId, mode='PBKDF2', useSSL=false}) {
 	if(sessionId === zero) return Promise.reject(new Error('Invalid SessionID provided'));
 	const response = await checkSessionId({
 		host,
@@ -76,4 +74,4 @@ checkSession.isValidSession = async function({host, sessionId, mode='PBKDF2', us
 	return Promise.resolve(false);
 };
 
-export {checkSession};
+export {isValidSession};

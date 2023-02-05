@@ -8,8 +8,6 @@
 
 import {XMLParser} from 'fast-xml-parser';
 
-const parseData = {};
-
 /**
  * Convert XML Data into a Object
  * @function xmlToJson
@@ -17,9 +15,9 @@ const parseData = {};
  * @param {String} parseData.xmlData - XML Data
  * @returns {Object} Response Data as Object
  */
-parseData.xmlToJson = function({xmlData}) {
+const xmlToJson = function({xmlData}) {
 	const parser = new XMLParser({ignoreDeclaration: true});
 	return parser.parse(xmlData);
 };
 
-export {parseData};
+export {xmlToJson};

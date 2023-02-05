@@ -5,11 +5,9 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-import {calcHash} from './calcHash.js';
-import {parseData} from './parseData.js';
-import {request} from './request.js';
-
-const createSession = {};
+import * as request from './request.js';
+import {calcMd5Response, calcPbkdf2Response} from './calcHash.js';
+import {xmlToJson} from './parseData.js';
 
 /**
  * Get Challenge Code from login Service of Fritz!OS
@@ -32,7 +30,7 @@ const getChallengeCode = async function({host, version, useSSL}) {
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	const {SessionInfo} = parseData.xmlToJson({xmlData: response});
+	const {SessionInfo} = xmlToJson({xmlData: response});
 	return Promise.resolve(SessionInfo.Challenge);
 };
 
@@ -69,7 +67,7 @@ const getSession = function(version) {
 				// If request fails, reject with error message
 				return Promise.reject(error);
 			});
-		return Promise.resolve(parseData.xmlToJson({xmlData: response}));
+		return Promise.resolve(xmlToJson({xmlData: response}));
 	};
 };
 
@@ -116,7 +114,7 @@ const getSessionMd5 = getSession(version.MD5);
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @returns {Promise<Object>} Response session data as Object
  */
-createSession.getSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false}) {
+const doInitSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false}) {
 	let processVersion = version.MD5;
 
 	// Force mode if selected
@@ -135,7 +133,7 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 	const supportsPbkdf2 = challengeCode.startsWith('2$');
 
 	if(supportsPbkdf2) {
-		const challengeResponse = calcHash.calcPbkdf2Response({
+		const challengeResponse = calcPbkdf2Response({
 			challengeCode,
 			password,
 		});
@@ -152,7 +150,7 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 	}
 
 	// Otherwise use MD5
-	const challengeResponse = calcHash.calcMd5Response({
+	const challengeResponse = calcMd5Response({
 		challengeCode,
 		password,
 	});
@@ -168,4 +166,4 @@ createSession.getSession = async function({host, user, password, mode = 'PBKDF2'
 	return Promise.resolve(sessionInfo);
 };
 
-export {createSession};
+export {doInitSession};

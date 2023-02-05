@@ -5,10 +5,8 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-import {parseData} from './parseData.js';
-import {request} from './request.js';
-
-const deviceInfo = {};
+import * as request from './request.js';
+import {xmlToJson} from './parseData.js';
 
 /**
  * Provides the basics Information from all SmartHome devices
@@ -20,7 +18,7 @@ const deviceInfo = {};
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response device list data as Object
  */
-deviceInfo.getDeviceList = async function({host, sessionId, useSSL}) {
+const getDeviceList = async function({host, sessionId, useSSL}) {
 	const response = await request.httpGetCommand({
 		command: 'getdevicelistinfos',
 		host,
@@ -31,7 +29,7 @@ deviceInfo.getDeviceList = async function({host, sessionId, useSSL}) {
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	return Promise.resolve(parseData.xmlToJson({xmlData: response}));
+	return Promise.resolve(xmlToJson({xmlData: response}));
 };
 
 /**
@@ -45,7 +43,7 @@ deviceInfo.getDeviceList = async function({host, sessionId, useSSL}) {
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response device stats data as Object
  */
-deviceInfo.getBasicDeviceStats = async function({host, sessionId, actorId, useSSL}) {
+const getBasicDeviceStats = async function({host, sessionId, actorId, useSSL}) {
 	const response = await request.httpGetCommand({
 		actorId,
 		command: 'getbasicdevicestats',
@@ -57,8 +55,7 @@ deviceInfo.getBasicDeviceStats = async function({host, sessionId, actorId, useSS
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	return Promise.resolve(parseData.xmlToJson({xmlData: response}));
+	return Promise.resolve(xmlToJson({xmlData: response}));
 };
 
-
-export {deviceInfo};
+export {getDeviceList, getBasicDeviceStats};
