@@ -18,7 +18,7 @@
     "interface",
     "smart-home"
   ],
-  "author": "Marina Egner",
+  "author": "Marina Egner <marinafcegner@sheepcreativestudios.de> (https://sheepcreativestudios.de/)",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/SheepCreativeSoftware/fritzSmartAPI/issues"
