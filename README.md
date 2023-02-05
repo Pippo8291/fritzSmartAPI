@@ -2,13 +2,31 @@
 node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface) 
 
 ## Instalation
-Not installable yet
+```bash
+npm install fritzsmartapi
+```
 
 ## Basic Usage
-Not yet usable
+
+Example to get the session ID using default Fritz!Box hostname (fritz.box):
+```js
+import * as fritzAPI from 'fritzsmartapi';
+
+fritzAPI.doInitSession({
+		host: 'fritz.box',
+		mode: 'PBKDF2',
+		password: 'mypassword,
+		useSSL: false,
+		user: 'username',
+}).
+	then((response) => {
+		const sessionId = response.SessionInfo.SID;
+		console.log(sessionID)
+	});
+```
 
 ## Functions
-Not yet Functional
+Not yet documented
 
 ## Fritzbox Interface Documentation
 - [AVM Interfaces](https://avm.de/service/schnittstellen/)
