@@ -19,13 +19,13 @@ Example to get the session ID using default Fritz!Box hostname (fritz.box):
 import * as fritzAPI from 'fritzsmartapi';
 
 fritzAPI.doInitSession({
-		host: 'fritz.box',
-		password: 'mypassword,
-		user: 'username',
+  host: 'fritz.box',
+  password: 'mypassword,
+  user: 'username',
 }).
-	then((response) => {
-		console.log(response)
-	});
+  then((response) => {
+    console.log(response)
+  });
 ```
 
 ## Functions
