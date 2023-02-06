@@ -1,6 +1,6 @@
 {
   "name": "fritzsmartapi",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)",
   "main": "index.js",
   "scripts": {
@@ -32,5 +32,8 @@
   "type": "module",
   "dependencies": {
     "fast-xml-parser": "^4.0.14"
+  },
+  "engines": {
+	"node": ">=18.0.0"
   }
 }
