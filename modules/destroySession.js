@@ -6,7 +6,7 @@
  * @copyright Marina Egner 2023
  */
 import * as request from './request.js';
-import {xmlToJson} from './parseData.js';
+import {parseSessionId, xmlToJson} from './parseData.js';
 
 // Define some Magic numbers for the version which is provided to the login service
 const version = {
@@ -22,10 +22,10 @@ const version = {
  * @param {String} connection.host - hostname or IP-Address
  * @param {Number} connection.sessionId - current session ID
  * @param {Number} [connection.mode='PBKDF2'] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
- * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @return {Promise<Object>} Response session data as Object
+ * @param {Boolean} [connection.fullOutput=false] - Get full output as object instead of just the SessionID
+ * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from request as Object
  */
-const destroySession = async function({host, sessionId, mode='PBKDF2', useSSL=false}) {
+const doEndSession = async function({host, sessionId, mode='PBKDF2', useSSL=false, fullOutput=false}) {
 	let processVersion = version.MD5;
 
 	// Force mode if selected
@@ -44,7 +44,9 @@ const destroySession = async function({host, sessionId, mode='PBKDF2', useSSL=fa
 			// If request fails, reject with error message
 			return Promise.reject(error);
 		});
-	return Promise.resolve(xmlToJson({xmlData: response}));
+
+	if(fullOutput) return Promise.resolve(xmlToJson({xmlData: response}));
+	return Promise.resolve(parseSessionId(xmlToJson({xmlData: response})));
 };
 
-export {destroySession};
+export {doEndSession};

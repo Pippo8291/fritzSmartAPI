@@ -33,13 +33,12 @@ const one = 1;
 describe('#Session', function () {
 	describe('#doInitSession with MD5', function () {
 		it('Connect - It should return a object with a valid Session ID', async function () {
-			const response = await fritzAPI.doInitSession({
+			const response = await fritzAPI.doInitSession({fullOutput: true,
 				host: config.credentials.host,
 				mode: 'MD5',
 				password: config.credentials.password,
 				useSSL: false,
-				user: config.credentials.user,
-			});
+				user: config.credentials.user});
 			config.sessionId = response.SessionInfo.SID;
 			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
 			assert.strictEqual(typeof response.SessionInfo.SID, 'string', `The SID should be type string but is ${typeof response.SessionInfo.SID}`);
@@ -56,12 +55,11 @@ describe('#Session', function () {
 			assert.strictEqual(response, true);
 		});
 		it('Logout - It should return a object with a invalid Session ID', async function () {
-			const response = await fritzAPI.doEndSession({
+			const response = await fritzAPI.doEndSession({fullOutput: true,
 				host: config.credentials.host,
 				mode: 'MD5',
 				sessionId: config.sessionId,
-				useSSL: false,
-			});
+				useSSL: false});
 			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
 			assert.strictEqual(typeof response.SessionInfo.SID, 'number', `The SID should be type number but is ${typeof response.SessionInfo.SID}`);
 			assert.strictEqual(response.SessionInfo.SID, zero);
@@ -77,15 +75,15 @@ describe('#Session', function () {
 			assert.strictEqual(response, false);
 		});
 	});
+
 	describe('#doInitSession with PBKDF2', function () {
 		it('Connect - It should return a object with a valid Session ID', async function () {
-			const response = await fritzAPI.doInitSession({
+			const response = await fritzAPI.doInitSession({fullOutput: true,
 				host: config.credentials.host,
 				mode: 'PBKDF2',
 				password: config.credentials.password,
 				useSSL: false,
-				user: config.credentials.user,
-			});
+				user: config.credentials.user});
 			config.sessionId = response.SessionInfo.SID;
 			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
 			assert.strictEqual(typeof response.SessionInfo.SID, 'string', `The SID should be type string but is ${typeof response.SessionInfo.SID}`);
@@ -102,12 +100,11 @@ describe('#Session', function () {
 			assert.strictEqual(response, true);
 		});
 		it('Logout - It should return a object with a invalid Session ID', async function () {
-			const response = await fritzAPI.doEndSession({
+			const response = await fritzAPI.doEndSession({fullOutput: true,
 				host: config.credentials.host,
 				mode: 'PBKDF2',
 				sessionId: config.sessionId,
-				useSSL: false,
-			});
+				useSSL: false});
 			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
 			assert.strictEqual(typeof response.SessionInfo.SID, 'number', `The SID should be type number but is ${typeof response.SessionInfo.SID}`);
 			assert.strictEqual(response.SessionInfo.SID, zero);
@@ -123,6 +120,85 @@ describe('#Session', function () {
 			assert.strictEqual(response, false);
 		});
 	});
+
+	describe('#Check login (MD5) without full output and without optional params', function () {
+		it('Connect - It should return a string with a valid Session ID', async function () {
+			const response = await fritzAPI.doInitSession({
+				host: config.credentials.host,
+				mode: 'MD5',
+				password: config.credentials.password,
+				user: config.credentials.user,
+			});
+			config.sessionId = response;
+			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
+			assert.notStrictEqual(response, zero);
+		});
+		it('Check - It should return boolean true if Session is valid', async function () {
+			const response = await fritzAPI.isValidSession({
+				host: config.credentials.host,
+				mode: 'MD5',
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'boolean', `Response should be type boolean but is ${typeof response}`);
+			assert.strictEqual(response, true);
+		});
+		it('Logout - It should return a string with a invalid Session ID', async function () {
+			const response = await fritzAPI.doEndSession({
+				host: config.credentials.host,
+				mode: 'MD5',
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'number', `The SID should be type number but is ${typeof response}`);
+			assert.strictEqual(response, zero);
+		});
+		it('Check - It should return boolean false if Session is invalid', async function () {
+			const response = await fritzAPI.isValidSession({
+				host: config.credentials.host,
+				mode: 'MD5',
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'boolean', `Response should be type boolean but is ${typeof response}`);
+			assert.strictEqual(response, false);
+		});
+	});
+
+	describe('#Check login (PBPBKDF2) without full output and without optional params', function () {
+		it('Connect - It should return a string with a valid Session ID', async function () {
+			const response = await fritzAPI.doInitSession({
+				host: config.credentials.host,
+				password: config.credentials.password,
+				user: config.credentials.user,
+			});
+			config.sessionId = response;
+			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
+			assert.notStrictEqual(response, zero);
+		});
+		it('Check - It should return boolean true if Session is valid', async function () {
+			const response = await fritzAPI.isValidSession({
+				host: config.credentials.host,
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'boolean', `Response should be type boolean but is ${typeof response}`);
+			assert.strictEqual(response, true);
+		});
+		it('Logout - It should return a string with a invalid Session ID', async function () {
+			const response = await fritzAPI.doEndSession({
+				host: config.credentials.host,
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'number', `The SID should be type number but is ${typeof response}`);
+			assert.strictEqual(response, zero);
+		});
+		it('Check - It should return boolean false if Session is invalid', async function () {
+			const response = await fritzAPI.isValidSession({
+				host: config.credentials.host,
+				sessionId: config.sessionId,
+			});
+			assert.strictEqual(typeof response, 'boolean', `Response should be type boolean but is ${typeof response}`);
+			assert.strictEqual(response, false);
+		});
+	});
+
 	describe('#isValidSession with Errors', function () {
 		it('Check with SessionID: 0 - It should return an Error', async function () {
 			const response = await fritzAPI.isValidSession({

@@ -20,4 +20,14 @@ const xmlToJson = function({xmlData}) {
 	return parser.parse(xmlData);
 };
 
-export {xmlToJson};
+/**
+ * Parse Session ID from login response object
+ * @function parseSessionId
+ * @param {Object} parseData - Object with Session ID
+ * @returns {String} Response the SessionID
+ */
+const parseSessionId = function(parseData) {
+	return parseData.SessionInfo.SID;
+};
+
+export {parseSessionId, xmlToJson};

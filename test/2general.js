@@ -39,10 +39,9 @@ describe('#General', function () {
 				useSSL: false,
 				user: config.credentials.user,
 			});
-			config.sessionId = response.SessionInfo.SID;
-			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
-			assert.strictEqual(typeof response.SessionInfo.SID, 'string', `The SID should be type string but is ${typeof response.SessionInfo.SID}`);
-			assert.notStrictEqual(response.SessionInfo.SID, zero);
+			config.sessionId = response;
+			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
+			assert.notStrictEqual(response, zero);
 		});
 	});
 	describe('#getDeviceListInfos', function () {
@@ -68,9 +67,8 @@ describe('#General', function () {
 				sessionId: config.sessionId,
 				useSSL: false,
 			});
-			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
-			assert.strictEqual(typeof response.SessionInfo.SID, 'number', `The SID should be type number but is ${typeof response.SessionInfo.SID}`);
-			assert.strictEqual(response.SessionInfo.SID, zero);
+			assert.strictEqual(typeof response, 'number', `The SID should be type number but is ${typeof response}`);
+			assert.strictEqual(response, zero);
 		});
 	});
 });

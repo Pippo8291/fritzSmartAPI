@@ -14,14 +14,11 @@ import * as fritzAPI from 'fritzsmartapi';
 
 fritzAPI.doInitSession({
 		host: 'fritz.box',
-		mode: 'PBKDF2',
 		password: 'mypassword,
-		useSSL: false,
 		user: 'username',
 }).
 	then((response) => {
-		const sessionId = response.SessionInfo.SID;
-		console.log(sessionID)
+		console.log(response)
 	});
 ```
 

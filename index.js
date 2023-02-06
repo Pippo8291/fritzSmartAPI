@@ -14,10 +14,12 @@ import * as deviceInfo from './modules/deviceInfo.js';
  * @param {String} connection.password - the password for the login
  * @param {String=} [connection.mode=PBKDF2] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @returns {Promise<Object>} Response session data as Object
+ * @param {Boolean} [connection.fullOutput=false] - Get full output as object instead of just the SessionID
+ * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
  */
-export const doInitSession = function({host, user, password, mode, useSSL}) {
-	return createSession.doInitSession({host,
+export const doInitSession = function({host, user, password, mode = 'PBKDF2', useSSL=false, fullOutput=false}) {
+	return createSession.doInitSession({fullOutput,
+		host,
 		mode,
 		password,
 		useSSL,
@@ -35,7 +37,7 @@ export const doInitSession = function({host, user, password, mode, useSSL}) {
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Boolean>} Response if Session is valid
  */
-export const isValidSession = function({host, sessionId, mode, useSSL}) {
+export const isValidSession = function({host, sessionId, mode = 'PBKDF2', useSSL=false}) {
 	return checkSession.isValidSession({host,
 		mode,
 		sessionId,
@@ -51,10 +53,12 @@ export const isValidSession = function({host, sessionId, mode, useSSL}) {
  * @param {Number} connection.sessionId - current session ID
  * @param {Number} [connection.mode='PBKDF2'] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @return {Promise<Object>} Response session data as Object
+ * @param {Boolean} [connection.fullOutput=false] - Get full output as object instead of just the SessionID
+ * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
  */
-export const doEndSession = function({host, sessionId, mode, useSSL}) {
-	return destroySession.doEndSession({host,
+export const doEndSession = function({host, sessionId, mode = 'PBKDF2', useSSL=false, fullOutput=false}) {
+	return destroySession.doEndSession({fullOutput,
+		host,
 		mode,
 		sessionId,
 		useSSL});
@@ -70,7 +74,7 @@ export const doEndSession = function({host, sessionId, mode, useSSL}) {
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response device list data as Object
  */
-export const getDeviceListInfos = function({host, sessionId, useSSL}) {
+export const getDeviceListInfos = function({host, sessionId, useSSL=false}) {
 	return deviceInfo.getDeviceListInfos({host,
 		sessionId,
 		useSSL});
@@ -87,7 +91,7 @@ export const getDeviceListInfos = function({host, sessionId, useSSL}) {
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response device stats data as Object
  */
-export const getBasicDeviceStats = function({host, sessionId, actorId, useSSL}) {
+export const getBasicDeviceStats = function({host, sessionId, actorId, useSSL=false}) {
 	return deviceInfo.getBasicDeviceStats({actorId,
 		host,
 		sessionId,

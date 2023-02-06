@@ -7,7 +7,7 @@
  */
 import * as request from './request.js';
 import {calcMd5Response, calcPbkdf2Response} from './calcHash.js';
-import {xmlToJson} from './parseData.js';
+import {parseSessionId, xmlToJson} from './parseData.js';
 
 /**
  * Get Challenge Code from login Service of Fritz!OS
@@ -112,9 +112,10 @@ const getSessionMd5 = getSession(version.MD5);
  * @param {String} connection.password - the password for the login
  * @param {String=} [connection.mode=PBKDF2] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @returns {Promise<Object>} Response session data as Object
+ * @param {Boolean} [connection.fullOutput=false] - Get full output as object instead of just the SessionID
+ * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
  */
-const doInitSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false}) {
+const doInitSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false, fullOutput=false}) {
 	let processVersion = version.MD5;
 
 	// Force mode if selected
@@ -146,7 +147,9 @@ const doInitSession = async function({host, user, password, mode = 'PBKDF2', use
 			catch((error) => {
 				return Promise.reject(error);
 			});
-		return Promise.resolve(sessionInfo);
+
+		if(fullOutput) return Promise.resolve(sessionInfo);
+		return Promise.resolve(parseSessionId(sessionInfo));
 	}
 
 	// Otherwise use MD5
@@ -154,7 +157,7 @@ const doInitSession = async function({host, user, password, mode = 'PBKDF2', use
 		challengeCode,
 		password,
 	});
-	const sessionInfo = getSessionMd5({
+	const sessionInfo = await getSessionMd5({
 		challengeResponse,
 		host,
 		useSSL,
@@ -163,7 +166,9 @@ const doInitSession = async function({host, user, password, mode = 'PBKDF2', use
 		catch((error) => {
 			return Promise.reject(error);
 		});
-	return Promise.resolve(sessionInfo);
+
+	if(fullOutput) return Promise.resolve(sessionInfo);
+	return Promise.resolve(parseSessionId(sessionInfo));
 };
 
 export {doInitSession};
