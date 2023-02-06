@@ -11,14 +11,14 @@ import {xmlToJson} from './parseData.js';
 /**
  * Provides the basics Information from all SmartHome devices
  * @async
- * @function getDeviceList
+ * @function getDeviceListInfos
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {Number} connection.sessionId - current session ID
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response device list data as Object
  */
-const getDeviceList = async function({host, sessionId, useSSL}) {
+const getDeviceListInfos = async function({host, sessionId, useSSL}) {
 	const response = await request.httpGetCommand({
 		command: 'getdevicelistinfos',
 		host,
@@ -58,4 +58,4 @@ const getBasicDeviceStats = async function({host, sessionId, actorId, useSSL}) {
 	return Promise.resolve(xmlToJson({xmlData: response}));
 };
 
-export {getDeviceList, getBasicDeviceStats};
+export {getDeviceListInfos, getBasicDeviceStats};

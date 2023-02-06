@@ -2,8 +2,8 @@
 
 import * as checkSession from './modules/checkSession.js';
 import * as createSession from './modules/createSession.js';
+import * as destroySession from './modules/destroySession.js';
 import * as deviceInfo from './modules/deviceInfo.js';
-import {destroySession} from './modules/destroySession.js';
 
 /**
  * Login request to Fritz!OS with use of PBKDF2 (Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process.
@@ -54,7 +54,7 @@ export const isValidSession = function({host, sessionId, mode, useSSL}) {
  * @return {Promise<Object>} Response session data as Object
  */
 export const doEndSession = function({host, sessionId, mode, useSSL}) {
-	return destroySession({host,
+	return destroySession.doEndSession({host,
 		mode,
 		sessionId,
 		useSSL});
@@ -71,7 +71,7 @@ export const doEndSession = function({host, sessionId, mode, useSSL}) {
  * @return {Promise<Object>} Response device list data as Object
  */
 export const getDeviceListInfos = function({host, sessionId, useSSL}) {
-	return deviceInfo.getDeviceList({host,
+	return deviceInfo.getDeviceListInfos({host,
 		sessionId,
 		useSSL});
 };
