@@ -20,11 +20,11 @@ import * as fritzAPI from 'fritzsmartapi';
 
 fritzAPI.doInitSession({
   host: 'fritz.box',
-  password: 'mypassword,
+  password: 'mypassword',
   user: 'username',
 }).
   then((response) => {
-    console.log(response)
+    console.log(response); // Session ID
   });
 ```
 
