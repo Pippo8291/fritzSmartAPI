@@ -5,7 +5,10 @@
 [![node-lts](https://img.shields.io/node/v-lts/fritzsmartapi)](https://www.npmjs.com/package/fritzsmartapi)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=RG6PSXR828X94)
 
-node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)
+node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)  
+
+This module is still work in progress!  
+Major changes can and will happend before v1.0.0
 
 ## Instalation
 ```bash
@@ -14,8 +17,8 @@ npm install fritzsmartapi
 
 ## Basic Usage
 
-Example to get the session ID using default Fritz!Box hostname (fritz.box):
-Supports PBKDF2 (Default; Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process for login
+Example to get the session ID using default Fritz!Box hostname (fritz.box):  
+Supports PBKDF2 (Default; Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process for login  
 If the Fritz!OS version does not support PBKDF2 then the function automaticly falls back to MD5.
 
 ```js
