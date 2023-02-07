@@ -106,16 +106,17 @@ const getSessionMd5 = getSession(version.MD5);
 /**
  * Login request to Fritz!OS with use of PBKDF2 (Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process.
  * If the Fritz!OS version does not support PBKDF2 then the function automaticly falls back to MD5.
+ * @param {Object} credentials - credentials details
+ * @param {String} credentials.user - the username for the login
+ * @param {String} credentials.password - the password for the login
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
- * @param {String} connection.user - the username for the login
- * @param {String} connection.password - the password for the login
  * @param {String=} [connection.mode=PBKDF2] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
- * @param {Boolean} [connection.fullOutput=false] - Get full output as object instead of just the SessionID
+ * @param {Boolean} [fullOutput=false] - Get full output as object instead of just the SessionID
  * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
  */
-const doInitSession = async function({host, user, password, mode = 'PBKDF2', useSSL = false, fullOutput=false}) {
+const doInitSession = async function({user, password}, {host, mode='PBKDF2', useSSL=false}, fullOutput=false) {
 	let processVersion = version.MD5;
 
 	// Force mode if selected

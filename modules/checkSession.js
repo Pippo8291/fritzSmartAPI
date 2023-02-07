@@ -18,14 +18,14 @@ const version = {
  * Logout user from the Fritz!OS interface
  * @async
  * @function
+ * @param {Number} sessionId - current session ID
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
- * @param {Number} connection.sessionId - current session ID
  * @param {Number} [connection.mode='PBKDF2'] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @return {Promise<Object>} Response session data as Object
  */
-const checkSessionId = async function({host, sessionId, mode, useSSL}) {
+const checkSessionId = async function(sessionId, {host, useSSL=false, mode='PBKDF2'}) {
 	let processVersion = version.MD5;
 
 	// Force mode if selected
