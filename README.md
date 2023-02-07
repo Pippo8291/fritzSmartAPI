@@ -1,4 +1,4 @@
-# fritzSmartAPI [WIP]
+# fritzSmartAPI **[WIP]**
 [![NPM Version](https://img.shields.io/npm/v/fritzsmartapi.svg)](https://www.npmjs.com/package/fritzsmartapi)
 [![NPM Downloads](https://img.shields.io/npm/dt/fritzsmartapi.svg)](https://www.npmjs.com/package/fritzsmartapi)
 [![GitHub](https://img.shields.io/github/license/SheepCreativeSoftware/fritzSmartAPI)](https://github.com/SheepCreativeSoftware/fritzSmartAPI)
@@ -7,8 +7,9 @@
 
 node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)  
 
-This module is still work in progress!  
-Major changes can and will happend before v1.0.0
+**This module is still work in progress!**  
+**Major changes can and will happend before v1.0.0**
+**Do not use this in an production enviroment**
 
 ## Instalation
 ```bash
