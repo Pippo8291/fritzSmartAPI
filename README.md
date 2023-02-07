@@ -15,16 +15,47 @@ npm install fritzsmartapi
 ## Basic Usage
 
 Example to get the session ID using default Fritz!Box hostname (fritz.box):
+Supports PBKDF2 (Default; Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50) Challenge-Response Process for login
+If the Fritz!OS version does not support PBKDF2 then the function automaticly falls back to MD5.
+
 ```js
 import * as fritzAPI from 'fritzsmartapi';
 
-fritzAPI.doInitSession({
-  host: 'fritz.box',
+const credentials = {
   password: 'mypassword',
   user: 'username',
-}).
+};
+
+const connection = {
+  host: 'fritz.box',
+  mode: 'PBKDF2', // [Optional] Challenge-Response Process
+  useSSL: false,  // [Optional] Use SSL/TLS Connection (default=false)
+};
+
+fritzAPI.doInitSession(credentials, connection).
+  then((sessionId) => {
+    console.log('Session ID: ' + sessionId); // e.g. Session ID: 9c977765016899f8
+  }).
+  catch((error) => {
+    console.log('Login failed', error);
+  });
+```
+Example to get the a list of all devices with the same connection details:
+```js
+fritzAPI.getDeviceListInfos(sessionId, connection).
   then((response) => {
-    console.log(response); // Session ID
+    console.log(response); // Device List
+    const {device} = response.devicelist;
+    const actorId = device[0].identifier; // e.g. Actor identifier of the first device in list
+  });
+```
+Example to switch a socket on a socket switch on or off:
+```js
+const switchOn = true;
+
+fritzAPI.setSwitchOnOff(sessionId, actorId, switchOn, connection).
+  then((switchState) => {
+    console.log('Switch is set to: ' + switchState); // e.g. Switch is set to: true
   });
 ```
 
