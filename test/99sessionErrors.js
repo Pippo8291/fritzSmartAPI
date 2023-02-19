@@ -36,13 +36,14 @@ if(typeof process.env.npm_config_host !== 'undefined') connection.host = process
 if(typeof process.env.npm_config_user !== 'undefined') credentials.user = process.env.npm_config_user;
 if(typeof process.env.npm_config_password !== 'undefined') credentials.password = process.env.npm_config_password;
 
-const zero = 0;
-const one = 1;
 const zeroString = '0';
 const oneString = '1';
+const defaulTimeout = 10000;
 
 describe('#Session', function () {
 	describe('#isValidSession with Errors', function () {
+		// eslint-disable-next-line no-invalid-this
+		this.timeout(defaulTimeout);
 		it('Check with SessionID: 0 - It should return an Error', async function () {
 			const response = await fritzAPI.isValidSession(zeroString, {host: connection.host}).
 				catch((error) => {
@@ -66,6 +67,12 @@ describe('#Session', function () {
 					assert.strictEqual(error.message, 'fetch failed');
 				});
 			assert.strictEqual(typeof response, 'undefined');
+		});
+		it('Connect with wrong username- It should return a invalid Session ID as String', async function () {
+			const response = await fritzAPI.doInitSession(fakeCredentials, connection);
+			config.sessionId = response;
+			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
+			assert.strictEqual(response, zeroString);
 		});
 	});
 });

@@ -114,7 +114,7 @@ const getSessionMd5 = getSession(version.MD5);
  * @param {String=} [connection.mode=PBKDF2] - Challenge-Response Process; either 'PBKDF2' (default) or 'MD5'
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
  * @param {Boolean} [fullOutput=false] - Get full output as object instead of just the SessionID
- * @return {Promise(String | Object)} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
+ * @return {Promise<String | Object>} Response SessionID as String or if fullOutput is true, the full output from rquest as Object
  */
 const doInitSession = async function({user, password}, {host, mode='PBKDF2', useSSL=false}, fullOutput=false) {
 	let processVersion = version.MD5;

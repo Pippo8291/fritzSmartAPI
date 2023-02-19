@@ -32,21 +32,21 @@ if(typeof process.env.npm_config_user !== 'undefined') credentials.user = proces
 if(typeof process.env.npm_config_password !== 'undefined') credentials.password = process.env.npm_config_password;
 
 const zero = 0;
-const one = 1;
 const zeroString = '0';
-const oneString = '1';
+const defaulTimeout = 10000;
 
 describe('#Session', function () {
 	describe('#doInitSession with MD5', function () {
+		// eslint-disable-next-line no-invalid-this
+		this.timeout(defaulTimeout);
 		it('Connect - It should return a object with a valid Session ID', async function () {
-			const response = await fritzAPI.doInitSession(credentials, {
-				host: connection.host,
+			const response = await fritzAPI.doInitSession(credentials, {host: connection.host,
 				mode: 'MD5',
 				useSSL: false}, true);
 			config.sessionId = response.SessionInfo.SID;
 			assert.strictEqual(typeof response, 'object', `Response should be type object but is ${typeof response}`);
 			assert.strictEqual(typeof response.SessionInfo.SID, 'string', `The SID should be type string but is ${typeof response.SessionInfo.SID}`);
-			assert.notStrictEqual(response.SessionInfo.SID, zero);
+			assert.notStrictEqual(response.SessionInfo.SID, zeroString);
 		});
 		it('Check - It should return boolean true if Session is valid', async function () {
 			const response = await fritzAPI.isValidSession(config.sessionId, {
@@ -80,7 +80,7 @@ describe('#Session', function () {
 				mode: 'MD5'});
 			config.sessionId = response;
 			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
-			assert.notStrictEqual(response, zero);
+			assert.notStrictEqual(response, zeroString);
 		});
 		it('Check - It should return boolean true if Session is valid', async function () {
 			const response = await fritzAPI.isValidSession(config.sessionId, {host: connection.host,
@@ -92,7 +92,7 @@ describe('#Session', function () {
 			const response = await fritzAPI.doEndSession(config.sessionId, {host: connection.host,
 				mode: 'MD5'});
 			assert.strictEqual(typeof response, 'string', `The SID should be type string but is ${typeof response}`);
-			assert.strictEqual(response, zero);
+			assert.strictEqual(response, zeroString);
 		});
 		it('Check - It should return boolean false if Session is invalid', async function () {
 			const response = await fritzAPI.isValidSession(config.sessionId, {host: connection.host,
