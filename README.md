@@ -8,8 +8,8 @@
 node.js module for Fritzbox Smart Home API (AHA-HTTP-Interface)  
 
 **This module is still work in progress!**  
-**Major changes can and will happend before v1.0.0**
-**Do not use this in an production enviroment**
+**Major changes can and will happend before v1.0.0**  
+**Do not use this in an production enviroment**  
 
 ## Instalation
 ```bash
@@ -23,7 +23,7 @@ Supports PBKDF2 (Default; Requires Fritz!OS 7.24) or MD5 (Requires Fritz!OS 5.50
 If the Fritz!OS version does not support PBKDF2 then the function automaticly falls back to MD5.
 
 ```js
-import * as fritzAPI from 'fritzsmartapi';
+import * as fritzApi from 'fritzsmartapi';
 
 const credentials = {
   password: 'mypassword',
@@ -36,7 +36,7 @@ const connection = {
   useSSL: false,  // [Optional] Use SSL/TLS Connection (default=false)
 };
 
-fritzAPI.doInitSession(credentials, connection).
+fritzApi.doInitSession(credentials, connection).
   then((sessionId) => {
     console.log('Session ID: ' + sessionId); // e.g. Session ID: 9c977765016899f8
   }).
@@ -46,7 +46,7 @@ fritzAPI.doInitSession(credentials, connection).
 ```
 Example to get the a list of all devices with the same connection details:
 ```js
-fritzAPI.getDeviceListInfos(sessionId, connection).
+fritzApi.getDeviceListInfos(sessionId, connection).
   then((response) => {
     console.log(response); // Device List
     const {device} = response.devicelist;
@@ -57,7 +57,7 @@ Example to switch a socket on a socket switch on or off:
 ```js
 const switchOn = true;
 
-fritzAPI.setSwitchOnOff(sessionId, actorId, switchOn, connection).
+fritzApi.setSwitchOnOff(sessionId, actorId, switchOn, connection).
   then((switchState) => {
     console.log('Switch is set to: ' + switchState); // e.g. Switch is set to: true
   });

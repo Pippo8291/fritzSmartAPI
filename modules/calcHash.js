@@ -17,7 +17,7 @@ import {createHash, pbkdf2Sync} from 'node:crypto';
  */
 const calcMd5Response = function({challengeCode, password}) {
 	const hash = createHash('md5');
-	const bufferData = Buffer.from(challengeCode + '-' + password, 'UTF-16LE');
+	const bufferData = Buffer.from(challengeCode + '-' + password, 'utf16le');
 	const md5Hash = hash.update(bufferData).digest('hex');
 	return challengeCode + '-' + md5Hash;
 };
@@ -37,7 +37,7 @@ const calcPbkdf2Response = function({challengeCode, password}) {
 	const challenge = {
 		iter1: Number(challengeSplitted[1]),
 		iter2: Number(challengeSplitted[3]),
-		pass: Buffer.from(password, 'UTF-8'),
+		pass: Buffer.from(password, 'utf8'),
 		salt1: Buffer.from(challengeSplitted[2], 'hex'),
 		salt2: Buffer.from(challengeSplitted[4], 'hex'),
 		salt2Norm: challengeSplitted[4],
