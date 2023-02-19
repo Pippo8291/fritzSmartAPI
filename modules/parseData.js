@@ -27,7 +27,9 @@ const xmlToJson = function({xmlData}) {
  * @returns {String} Response the SessionID
  */
 const parseSessionId = function(parseData) {
-	return parseData.SessionInfo.SID;
+	const sid = parseData.SessionInfo.SID;
+	if(typeof sid === 'number') return sid.toString();
+	return sid;
 };
 
 export {parseSessionId, xmlToJson};

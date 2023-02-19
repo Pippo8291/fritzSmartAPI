@@ -15,7 +15,7 @@ import {parseSessionId, xmlToJson} from './parseData.js';
  * @function
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
- * @param {Number} connection.version - version to be used for connection (1 or 2)
+ * @param {String} connection.version - version to be used for connection (1 or 2)
  * @param {Boolean} connection.useSSL - true if SSL connection over https should be used
  * @return {Promise<String>} Challenge code
  */
@@ -38,7 +38,7 @@ const getChallengeCode = async function({host, version, useSSL}) {
 /**
  * Creates a function to get json converted data from login Service of Fritz!OS
  * @function
- * @param {Number} version - version to be used for connection (1 or 2)
+ * @param {String} version - version to be used for connection (1 or 2)
  */
 const getSession = function(version) {
 	/**
@@ -73,8 +73,8 @@ const getSession = function(version) {
 
 // Define some Magic numbers for the version which is provided to the login service
 const version = {
-	MD5: 1,
-	PBKDF2: 2,
+	MD5: '1',
+	PBKDF2: '2',
 };
 
 /**

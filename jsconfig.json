@@ -2,6 +2,6 @@
 	"compilerOptions": {
 		"module": "ES6",
 		"moduleResolution": "node",
-		"checkJs": true,
+		"checkJs": true
 	}
 }

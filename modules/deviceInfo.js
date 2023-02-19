@@ -12,7 +12,7 @@ import {xmlToJson} from './parseData.js';
  * Provides the basics Information from all SmartHome devices
  * @async
  * @function getDeviceListInfos
- * @param {Number} sessionId - current session ID
+ * @param {String} sessionId - current session ID
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
@@ -36,7 +36,7 @@ const getDeviceListInfos = async function(sessionId, {host, useSSL=false}) {
  * Returns the basic statistics (temperature, voltage, power, energy) of the actuator
  * @async
  * @function getBasicDeviceStats
- * @param {Number} sessionId - current session ID
+ * @param {String} sessionId - current session ID
  * @param {String} actorId - Identifier of a actor, template (e.g. number) or MAC-Address of a network device
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
@@ -62,7 +62,7 @@ const getBasicDeviceStats = async function(sessionId, actorId, {host, useSSL=fal
  * Provides the basic information of all routines/triggers
  * @async
  * @function getTriggerListInfos
- * @param {Number} sessionId - current session ID
+ * @param {String} sessionId - current session ID
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)
@@ -86,7 +86,7 @@ const getTriggerListInfos = async function(sessionId, {host, useSSL=false}) {
  * Provides the basic information of all templates/templates
  * @async
  * @function getTemplateListInfos
- * @param {Number} sessionId - current session ID
+ * @param {String} sessionId - current session ID
  * @param {Object} connection - connection details
  * @param {String} connection.host - hostname or IP-Address
  * @param {Boolean} [connection.useSSL=false] - true if SSL connection over https should be used (default is false)

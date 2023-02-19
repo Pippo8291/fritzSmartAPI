@@ -11,7 +11,7 @@ import * as request from './request.js';
  * Switches socket on or off
  * @async
  * @function setSwitchOnOff
- * @param {Number} sessionId - current session ID
+ * @param {String} sessionId - current session ID
  * @param {String} actorId - Identifier of a actor, template (e.g. number) or MAC-Address of a network device
  * @param {Boolean} switchOnOff - Turns actor on or off
  * @param {Object} connection - connection details
