@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/SheepCreativeSoftware/fritzSmartAPI#readme",
   "devDependencies": {
+    "Buffer": "^0.0.0",
     "eslint": "^8.32.0",
     "expect.js": "^0.3.1",
     "mocha": "^10.2.0"
@@ -34,6 +35,6 @@
     "fast-xml-parser": "^4.0.14"
   },
   "engines": {
-	"node": ">=18.0.0"
+    "node": ">=18.0.0"
   }
 }
