@@ -33,19 +33,32 @@ const pbkdf2KeyLen = 32;
  * @returns {String} PBKDF2 Challenge Response code
  */
 const calcPbkdf2Response = function({challengeCode, password}) {
+	const pbkdf2KeyLen = 32;
 	const challengeSplitted = challengeCode.split('$');
-	const challenge = {
-		iter1: Number(challengeSplitted[1]),
-		iter2: Number(challengeSplitted[3]),
-		pass: Buffer.from(password, 'utf8'),
-		salt1: Buffer.from(challengeSplitted[2], 'hex'),
-		salt2: Buffer.from(challengeSplitted[4], 'hex'),
-		salt2Norm: challengeSplitted[4],
-	};
-	const hash1 = pbkdf2Sync(challenge.pass, challenge.salt1, challenge.iter1, pbkdf2KeyLen, 'sha256').toString('hex');
-	const bufferHash1 = Buffer.from(hash1, 'hex');
-	const hash2 = pbkdf2Sync(bufferHash1, challenge.salt2, challenge.iter2, pbkdf2KeyLen, 'sha256').toString('hex');
-	return challenge.salt2Norm + '$' + hash2;
+	const passUtf8 = new TextEncoder().encode(password);
+	const salt1Hex = challengeSplitted[2];
+	const salt2Hex = challengeSplitted[4];
+	const salt1 = hexStringToUint8Array(salt1Hex);
+	const salt2 = hexStringToUint8Array(salt2Hex);
+	const iter1 = Number(challengeSplitted[1]);
+	const iter2 = Number(challengeSplitted[3]);
+
+	const hash1 = pbkdf2Sync(passUtf8, salt1, iter1, pbkdf2KeyLen, 'sha256').toString('hex');
+	const hash1Bytes = hexStringToUint8Array(hash1);
+	const hash2 = pbkdf2Sync(hash1Bytes, salt2, iter2, pbkdf2KeyLen, 'sha256').toString('hex');
+
+	return challengeSplitted[4] + '$' + hash2;
+};
+
+// Helper function to convert hex string to Uint8Array
+const hexStringToUint8Array = function(hexString) {
+	const bytes = [];
+	// eslint-disable-next-line no-magic-numbers,id-length
+	for(let i = 0; i < hexString.length; i += 2) {
+		// eslint-disable-next-line no-magic-numbers
+		bytes.push(parseInt(hexString.substr(i, 2), 16));
+	}
+	return new Uint8Array(bytes);
 };
 
 export {calcMd5Response, calcPbkdf2Response};
