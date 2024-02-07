@@ -28,7 +28,9 @@
     "buffer": "^6.0.3",
     "eslint": "^8.32.0",
     "expect.js": "^0.3.1",
-    "mocha": "^10.2.0"
+    "md5-hash": "^1.0.1",
+    "mocha": "^10.2.0",
+    "pbkdf2": "^3.1.2"
   },
   "type": "module",
   "dependencies": {
