@@ -5,8 +5,9 @@
  * @author Marina Egner <marinafcegner@sheepCreativeStudios.de>
  * @copyright Marina Egner 2023
  */
-
-import {createHash, pbkdf2Sync} from 'node:crypto';
+import {
+	pbkdf2Sync,
+} from 'browser-crypto';
 
 /**
  * Calculates MD5 Challenge Response code
@@ -33,7 +34,6 @@ const pbkdf2KeyLen = 32;
  * @returns {String} PBKDF2 Challenge Response code
  */
 const calcPbkdf2Response = function({challengeCode, password}) {
-	const pbkdf2KeyLen = 32;
 	const challengeSplitted = challengeCode.split('$');
 	const passUtf8 = new TextEncoder().encode(password);
 	const salt1Hex = challengeSplitted[2];
